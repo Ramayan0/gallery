@@ -24,12 +24,11 @@ pipeline {
                 
      }
         stage('Deploy to Render') {
-             steps {
+          steps {
         echo 'Deploying the application...'
+        // Run the server in the background using nohup 
         sh '''
-            nohup node server.js &
-            sleep 60  # Wait for 60 seconds (or as needed)
-            kill $(jobs -p)  # Kill the background process after timeout
+        nohup node server.js &
         '''
     }
         }
