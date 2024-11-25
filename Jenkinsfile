@@ -33,12 +33,23 @@ pipeline {
     }
         }
     }
-    post {
+     post {
         always {
             echo 'Pipeline finished.'
         }
         success {
-            echo 'Pipeline completed successfully!'
+            script {
+                echo 'Pipeline completed successfully!'
+                // Slack notification for success
+                withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_TOKEN')]) {
+                    slackSend(
+                        channel: '#hamsa_ip1',
+                        tokenCredentialId: 'slack-bot-token', // Use the credential ID directly here
+                        color: 'good',
+                        message: "Pipeline completed successfully! 🎉\nBuild ID: ${currentBuild.id}\nView your deployed application here: https://gallery-l0ph.onrender.com"
+                    )
+                }
+            }
         }
         failure {
             script {
@@ -46,6 +57,15 @@ pipeline {
                 emailext to: 'hamsa.adan1@student.moringaschool.com',
                          subject: "Build Failed",
                          body: "The Jenkins build has failed. Please check the logs for more details."
+                // Slack notification for failure
+                withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_TOKEN')]) {
+                    slackSend(
+                        channel: 'hamsa_ip1',
+                        tokenCredentialId: 'slack-bot-token', // Use the credential ID directly here
+                        color: 'danger',
+                        message: "Pipeline failed. 🚨\nBuild ID: ${currentBuild.id}\nPlease check the Jenkins logs for details."
+                    )
+                }
             }
         }
     }
