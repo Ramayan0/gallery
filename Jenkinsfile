@@ -10,7 +10,7 @@ pipeline {
                 sh 'npm install'
             }
         }
-         stage('Run Tests') {
+        stage('Run Tests') {
             steps {
                 echo 'Running tests...'
                 sh 'npm test'
@@ -22,19 +22,21 @@ pipeline {
                 sh 'npm run build'
             }
         }
-        stage('Deploy to render') {
+        stage('Deploy to Render') {
             steps {
                 echo 'Deploying the application...'
                 sh 'node server.js'
             }
         }
     }
-     post {
+    post {
         always {
             echo 'Pipeline finished.'
         }
-    }
-    failure {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
             script {
                 // Send email in case of failure
                 emailext to: 'hamsa.adan1@student.moringaschool.com',
@@ -42,4 +44,5 @@ pipeline {
                          body: "The Jenkins build has failed. Please check the logs for more details."
             }
         }
+    }
 }
