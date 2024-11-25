@@ -18,9 +18,10 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                sh 'npm run build'
-            }
+                echo 'No build step required.'
+                sh 'npm run build' // This will just echo the message
+                }
+                
         }
         stage('Deploy to Render') {
             steps {
