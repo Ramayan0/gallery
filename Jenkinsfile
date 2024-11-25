@@ -60,7 +60,7 @@ pipeline {
                 // Slack notification for failure
                 withCredentials([string(credentialsId: 'slack-bot-token', variable: 'SLACK_TOKEN')]) {
                     slackSend(
-                        channel: 'hamsa_ip1',
+                        channel: '#hamsa_ip1',
                         tokenCredentialId: 'slack-bot-token', // Use the credential ID directly here
                         color: 'danger',
                         message: "Pipeline failed. 🚨\nBuild ID: ${currentBuild.id}\nPlease check the Jenkins logs for details."
