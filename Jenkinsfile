@@ -19,15 +19,19 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'No build step required.'
-                sh 'npm run build' // This will just echo the message
+                sh 'npm run build' 
                 }
                 
-        }
+     }
         stage('Deploy to Render') {
-            steps {
-                echo 'Deploying the application...'
-                sh 'node server.js'
-            }
+             steps {
+        echo 'Deploying the application...'
+        sh '''
+            nohup node server.js &
+            sleep 60  # Wait for 60 seconds (or as needed)
+            kill $(jobs -p)  # Kill the background process after timeout
+        '''
+    }
         }
     }
     post {
